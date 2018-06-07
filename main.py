@@ -2,7 +2,9 @@ import csv
 import json
 import tkinter as tk
 from tkinter import filedialog as fd
+import os
 from twilio.rest import Client
+from PIL import Image, ImageTk
 
 
 
@@ -38,19 +40,20 @@ def send_message(file, text):
         client.messages.create(to=number, from_="+1 (469) 754-9682", body=text.format(name))
 
 
-def open_file():
-    global file
-    file = fd.askopenfilename()
-    return file
 
 
 def gui():
-    """ render the Gui"""
+    """ render the Gui, obviously"""
+    
+    # declare the globals
+    global csv_file_ask
+    global message
+    
     window = tk.Tk()
     window.geometry('400x400')
 
     # create frame title
-    window.title('Fuzzy Patato')
+    window.title('ACC TextMessages')
 
     # make the window not resizable
     window.resizable(False, False)
@@ -58,25 +61,42 @@ def gui():
     # make the background black
     window.config(background="white")
 
+    # ACC icon
+    window.iconbitmap("C:/Users/bilal/Downloads/acc_logo_icon.ico")
+
     # insert the message
-    message = tk.Text(master=window, width=40, height=10, font=("Times New Roman", 12))
+    message = tk.Text(master=window, width=40, height=10, font=("Ariel", 12))
     message.place(relx=0.5, rely=0.5, anchor="center")
 
-    csv_file = tk.Button(master=window, text="choose a file", command=open_file)
-    csv_file.place(relx=0.5, rely=0.8, anchor="center")
+    # open file button
+    csv_file_ask = tk.Button(master=window, text="choose a file", command=open_file)
+    csv_file_ask.place(relx=0.5, rely=0.8, anchor="center")
 
-    button = tk.Button(text="send", command=lambda: send_message(file, message.get("1.0", "end")))
+    button = tk.Button(text="send", command=lambda: send_message(csv_file, message.get("1.0", "end")))
     button.place(relx=0.5, rely=0.9, anchor="center")
 
-    # image = Image.open('c:/Users/bilal/OneDrive/Pictures/pakistan-flag-e1345558966990.jpg')
-    # image.thumbnail((100, 100), Image.ANTIALIAS)
-    # photo = ImageTk.PhotoImage(image)
-    # label_image = tk.Label(image=photo)
-    # label_image.grid(column=1, row=0)
-    # window.mainloop()
+    # ACC logo
+    image = Image.open("C:/Users/bilal/OneDrive/Pictures/acc_logo.png")
+    image.thumbnail((150, 200), Image.ANTIALIAS)
+    photo = ImageTk.PhotoImage(image)
+    label_image = tk.Label(image=photo)
+    label_image.place(relx=0.5, rely=0.14, anchor="center")
+    window.mainloop()
 
+def open_file():
+    """open the file"""
+    global csv_file
+    csv_file = fd.askopenfilename()
+    csv_file_ask['state'] = 'disabled'
+    
+    if os.path.splitext(csv_file)[1] == ".csv":
+        return csv_file
+    else:
+        message.insert(tk.END, "\nOops, thats not a CSV file")
+        csv_file_ask['state'] = 'normal'
 
 def main():
+    """it's the main function, duuh"""
     gui()
 
 if __name__ == '__main__':
