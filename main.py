@@ -72,6 +72,7 @@ def gui():
     csv_file_ask = tk.Button(master=window, text="choose a file", command=open_file)
     csv_file_ask.place(relx=0.5, rely=0.8, anchor="center")
 
+    # send button
     button = tk.Button(text="send", command=lambda: send_message(csv_file, message.get("1.0", "end")))
     button.place(relx=0.5, rely=0.9, anchor="center")
 
