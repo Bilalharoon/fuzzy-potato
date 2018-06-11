@@ -18,6 +18,8 @@ def index():
     csv_writer = csv.writer(response_file,)
 
     csv_writer.writerow([number, message_body])
+    response_file.close()
+    
     return str(resp)
     
 if __name__ == '__main__':

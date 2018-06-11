@@ -40,7 +40,7 @@ def send_message(file, text):
         client.messages.create(to=number, from_="+1 (469) 754-9682", body=text.format(name))
 
 
-
+    f.close()
 
 def gui():
     """ render the Gui, obviously"""
